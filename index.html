@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>LILO PULSE</title>
+<style>
+  :root{ color-scheme: dark; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:-apple-system,system-ui,Segoe UI,Roboto,sans-serif;
+    background:#060a14; color:#dbeafe; min-height:100vh;
+    background-image: radial-gradient(1000px 500px at 50% -5%, #0e2a44 0%, #060a14 55%); }
+  .wrap{ max-width:460px; margin:0 auto; padding:20px 16px 44px; text-align:center; }
+  h1{ font-size:20px; letter-spacing:6px; color:#4fd1ff; margin:4px 0 2px; font-weight:800; }
+  .sub{ font-size:12px; color:#6b8bb0; margin-bottom:12px; }
+  .top{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:10px; }
+  select,button{ font-size:13px; border-radius:10px; border:1px solid #1d5276; padding:8px 10px;
+    background:#0f1b2d; color:#9fe0ff; font-weight:600; cursor:pointer; }
+  button:hover{ background:#1a4a73; }
+  .space{ position:relative; width:200px; height:200px; margin:10px auto 6px; }
+  .orbit{ position:absolute; inset:-6px; border-radius:50%; border:1px solid rgba(79,209,255,.18); animation:spin 14s linear infinite; }
+  .orbit::after{ content:""; position:absolute; top:-4px; left:50%; width:8px; height:8px; margin-left:-4px; border-radius:50%; background:#8fe8ff; box-shadow:0 0 12px 3px #4fd1ff; }
+  @keyframes spin{ to{ transform:rotate(360deg);} }
+  .planet{ position:absolute; inset:22px; border-radius:50%;
+    background: radial-gradient(circle at 34% 30%, #bfeaff 0%, #5ab8ea 22%, #2f82c4 45%, #15567f 65%, #0a3350 80%, #05243a 100%);
+    box-shadow: inset -22px -16px 46px rgba(0,0,0,.6), inset 14px 12px 30px rgba(190,235,255,.35), 0 0 46px 8px rgba(79,209,255,.4);
+    overflow:hidden; animation:breathe 4s ease-in-out infinite; transition: box-shadow .5s; }
+  @keyframes breathe{ 0%,100%{ transform:scale(1);} 50%{ transform:scale(1.03);} }
+  .planet::before{ content:""; position:absolute; inset:0; border-radius:50%;
+    background: radial-gradient(40px 18px at 60% 40%, rgba(255,255,255,.18), transparent 70%), radial-gradient(30px 14px at 35% 62%, rgba(255,255,255,.12), transparent 70%), radial-gradient(60px 24px at 72% 72%, rgba(0,0,0,.25), transparent 70%);
+    background-repeat:no-repeat; animation:drift 18s linear infinite; }
+  @keyframes drift{ to{ background-position: 200px 0, -200px 0, 160px 0; } }
+  .reloj{ font-size:50px; font-weight:800; letter-spacing:1px; margin:6px 0 0; font-variant-numeric:tabular-nums; }
+  .evento{ font-size:16px; color:#fff; font-weight:700; min-height:20px; }
+  .pares{ font-size:13px; color:#7de3ff; font-weight:700; margin-top:5px; }
+  .badge{ display:inline-block; margin-top:8px; font-size:12px; background:#0c2a1a; color:#7ef0a6; border:1px solid #1d5a38; border-radius:20px; padding:4px 12px; font-weight:700; }
+  .mensaje{ font-size:17px; line-height:1.45; margin:14px auto 2px; max-width:360px; min-height:66px; color:#eaf4ff; font-weight:600; }
+  .animo{ font-size:13px; color:#8fb3d6; font-style:italic; min-height:18px; margin-bottom:4px; }
+  .card{ text-align:left; background:#0b1728; border:1px solid #17304a; border-radius:12px; padding:14px 16px; margin-top:12px; }
+  .card h3{ font-size:11px; letter-spacing:1px; color:#4fd1ff; margin:0 0 9px; }
+  .card ol{ margin:0; padding-left:18px; font-size:14px; line-height:1.55; } .card ol li{ margin-bottom:5px; }
+  .ev{ display:flex; justify-content:space-between; gap:8px; font-size:13px; padding:5px 2px; border-bottom:1px solid #0f2236; }
+  .ev .n{ color:#bfe3ff; font-weight:600; } .ev .h{ color:#7fa6c9; white-space:nowrap; }
+  .chk{ display:flex; align-items:center; gap:9px; font-size:14px; padding:6px 2px; cursor:pointer; }
+  .chk .box{ width:20px; height:20px; border-radius:6px; border:2px solid #2a5f86; flex:none; display:flex; align-items:center; justify-content:center; font-size:13px; color:#060a14; }
+  .chk.on .box{ background:#4fd1ff; border-color:#4fd1ff; } .chk.on span{ color:#7fa6c9; text-decoration:line-through; }
+  .med{ background:#10243d; border:1px solid #1d5276; }
+  .med .btns{ display:flex; gap:10px; margin:6px 0; }
+  .med .btns button{ flex:1; font-size:15px; padding:12px; }
+  .strong{ background:#13402a; color:#8ef0ad; border-color:#1d6a40; }
+  .weak{ background:#2e2a16; color:#e8d08a; border-color:#5c5020; }
+  .medres{ font-size:15px; font-weight:700; min-height:22px; margin-top:4px; }
+  .res{ display:flex; gap:10px; justify-content:center; margin-top:10px; }
+  .res button{ font-size:15px; padding:11px 18px; }
+  .win{ background:#13402a; color:#8ef0ad; border-color:#1d6a40; } .lose{ background:#3f1d1d; color:#f0a0a0; border-color:#6a2a2a; }
+  .racha{ font-size:14px; color:#ffd36b; font-weight:700; margin-top:10px; min-height:18px; }
+  .mini{ font-size:11px; color:#5e7da0; margin-top:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>LILO PULSE</h1>
+  <div class="sub" id="sub"></div>
+
+  <div class="top">
+    <select id="lang"><option value="es">🇦🇷 Español</option><option value="en">🇬🇧 English</option><option value="pt">🇧🇷 Português</option></select>
+    <select id="tz">
+      <option value="America/Argentina/Buenos_Aires|ARG" selected>Argentina</option>
+      <option value="America/Bogota|COL">Colombia</option><option value="America/Lima|PER">Perú</option>
+      <option value="America/Costa_Rica|CR">Costa Rica</option><option value="America/Mexico_City|MX">México</option>
+      <option value="America/Sao_Paulo|BR">Brasil</option><option value="Europe/Madrid|ESP">España</option>
+      <option value="America/New_York|NY">New York</option><option value="UTC|UTC">UTC</option>
+    </select>
+  </div>
+
+  <div class="space"><div class="orbit"></div><div class="planet" id="planet"></div></div>
+  <div class="reloj" id="reloj">--:--:--</div>
+  <div class="evento" id="evento">—</div>
+  <div class="pares" id="pares"></div>
+  <div class="badge" id="badge"></div>
+  <div id="expect" style="font-size:14px;color:#ffd36b;font-weight:700;margin-top:6px;min-height:18px"></div>
+  <div class="mensaje" id="mensaje">…</div>
+  <div class="animo" id="animo"></div>
+
+  <div class="top">
+    <button id="sonido">🔔</button>
+    <button data-sec="qsirve">❔ <span id="l_qsirve"></span></button>
+    <button data-sec="chk">✅ <span id="l_chk"></span></button>
+    <button data-sec="man">📋 <span id="l_man"></span></button>
+  </div>
+
+  <div class="card med">
+    <h3 id="med_t"></h3>
+    <div id="med_q" style="font-size:14px;line-height:1.5"></div>
+    <div class="btns">
+      <button class="strong" id="bstrong"></button>
+      <button class="weak" id="bweak"></button>
+    </div>
+    <div class="medres" id="med_res"></div>
+  </div>
+
+  <div class="card" id="qsirve" style="display:none"><h3 id="qsirve_t"></h3><div id="qsirve_b" style="font-size:14px;line-height:1.55"></div></div>
+  <div class="card" id="chk" style="display:none"><h3 id="chk_t"></h3><div id="chk_items"></div></div>
+  <div class="card" id="man" style="display:none"><h3 id="man_t"></h3><ol id="man_b"></ol></div>
+
+  <div class="card">
+    <h3 id="resu_t"></h3>
+    <div class="res"><button class="win" id="bwin">😄 <span id="win_l"></span></button><button class="lose" id="blose">😕 <span id="lose_l"></span></button></div>
+    <div class="racha" id="racha"></div>
+  </div>
+
+  <div class="card"><h3 id="prox_t"></h3><div id="proximas"></div><div class="mini" id="prox_mini"></div></div>
+</div>
+
+<script>
+(function(){
+  var USD="EUR/USD · GBP/USD";
+  var cal=[
+    {n:"FOMC", iso:"2026-10-28T18:00:00Z", p:USD},
+    {n:"NFP",  iso:"2026-11-06T13:30:00Z", p:USD},
+    {n:"CPI",  iso:"2026-11-10T13:30:00Z", p:USD},
+    {n:"NFP",  iso:"2026-12-04T13:30:00Z", p:USD},
+    {n:"FOMC", iso:"2026-12-09T19:00:00Z", p:USD},
+    {n:"CPI",  iso:"2026-12-10T13:30:00Z", p:USD}
+  ].map(function(e){ e.ts=new Date(e.iso).getTime(); return e; });
+
+  var T={
+   es:{ sub:"tu compañero para operar las noticias",
+     l_q:"¿Para qué sirve?", l_c:"Checklist", l_m:"Cómo operar",
+     qsirveT:"¿PARA QUÉ SIRVE?",
+     qsirveB:"Operás el <b>estirón</b> de las noticias grandes. Dos formas:<br><br>• <b>Forex (la más segura):</b> dejás compra arriba y venta abajo (straddle). Salta una, buscás ganar 2 a 3 veces lo que arriesgás. Como es <b>2 a 1, sos rentable desde 33%</b> — y acertamos ~60%. Margen enorme, y cuando perdés no perdés todo.<br><br>• <b>Binarias con órdenes pendientes:</b> si tu bróker deja pendientes, CALL arriba y PUT abajo, 1 min. Acá la clave es el <b>EMPUJÓN FUERTE</b>: si entrás solo cuando el primer minuto se mueve fuerte (≥8 pips), la efectividad sube a <b>71%</b> (contra 63% si entrás a todas). Con 71% el margen es bueno de verdad.<br><br><b>¿Qué es un pip?</b> La unidad de movimiento del precio. En EUR/USD = el 4º decimal (0.0001). Ej: de 1.1000 a 1.1008 = 8 pips. En binarias se mide igual; el pip solo te sirve para medir si el empujón es fuerte y a qué distancia poner la pendiente.",
+     chkT:"CHECKLIST ANTES DE LA NOTICIA", chk:["Abrí tu plataforma / bróker","Elegí el par (EUR/USD)","Monto chico","DEJÁ las 2 órdenes pendientes: CALL arriba y PUT abajo","Cuando salta una, cancelá la otra (OCO)"],
+     manT:"CÓMO OPERAR — ELEGÍ UNA FORMA", man:["<b>Antes (las dos):</b> abrí tu plataforma, EUR/USD, monto chico.","<b>🤖 AUTOMÁTICA (pendiente):</b> poné 2 pendientes a 8-10 pips — CALL arriba, PUT abajo, 1 min. Salta sola la del lado que se mueve y cancelás la otra. Cómoda, no mirás nada. Contra: puede agarrar algún amague (mecha).","<b>✋ MANUAL (más precisa, 71%):</b> SIN pendientes. Mirás la primera vela y, si el CUERPO cierra fuerte (≥8 pips, sin mecha grande que lo anule), entrás vos en la SIGUIENTE vela, 1 min. Evitás los amagues, pero tenés que estar mirando.","<b>Después (las dos):</b> Gané o Perdí, y anotá si el bróker respetó la pendiente.","<b>Regla de oro:</b> empezá CHICO y en cuenta propia. Solo empujones fuertes."],
+     medT:"MEDIDOR DE EMPUJÓN", medQ:"Cuando salga la noticia, mirá la primera vela de 1 minuto:",
+     bS:"💥 Fuerte (≥8 pips)", bW:"💨 Flojo", rS:"✅ ¡FUERTE! Entrá para el lado del empujón → si SUBIÓ: CALL (compra) ⬆️ · si BAJÓ: PUT (venta) ⬇️. Con pendientes ya salta sola.", rW:"✋ Flojo. Mejor dejá pasar y esperá la próxima.",
+     resuT:"¿CÓMO TE FUE?", winL:"Gané", loseL:"Perdí",
+     proxT:"PRÓXIMAS NOTICIAS GRANDES (EEUU)", proxMini:"2 min antes dejá las pendientes. Horas en tu zona.",
+     badge:"Efectividad con empujón fuerte: 71%", mueve:"📊 Mueve: ", eleg:" (elegí EUR/USD)",
+     et:function(mn,nm){return["Falta "+mn+" min para "+nm+". Tranquilo, preparate.","Se viene "+nm+". Preparate: pendientes en EUR/USD — CALL arriba, PUT abajo.","⚠️ ¡Dos minutos! Dejá las pendientes AHORA. Una arriba, una abajo.","30 segundos… respirá. Todo listo, no toques nada.","🔴 ¡AHORA! Salió "+nm+". ¿El empujón es FUERTE? Si la vela es grande, entrá.","¿Siguió fuerte para el mismo lado? Dejá correr al minuto.","Noticia pasada. Ya preparo la próxima."];},
+     exp:{NFP:"🔥 Suele pegar FUERTE — empujón de ~28 pips",CPI:"🔥 Fuerte — la inflación mueve mucho",FOMC:"⚡ Puede ser MUY fuerte — decisión de tasas"},
+     animo:["Tranquilo, vos sabés esto.","Paciencia, el empujón fuerte viene.","Un paso por vez.","Hoy puede ser el día.","Confiá en el plan."],
+     winM:["¡Bien ahí! 💪","¡Esa es! 🎯","Vamos que se puede.","¡Golazo!"], loseM:["Tranquilo, la próxima.","Pasa, seguimos.","Cuenta chica, sin drama.","Respirá, va a venir."],
+     racha:function(n){return n>0?("🔥 Racha: "+n+" seguidas"):(n<0?("Racha: "+(-n)+" al hilo — tranquilo"):"");}
+   },
+   en:{ sub:"your companion to trade the news",
+     l_q:"What is it for?", l_c:"Checklist", l_m:"How to trade",
+     qsirveT:"WHAT IS IT FOR?",
+     qsirveB:"You trade the <b>spike</b> of big news. Two ways:<br><br>• <b>Forex (safest):</b> buy above, sell below (straddle). One triggers, you aim for 2–3x your risk. Since it's <b>2:1, you're profitable from 33%</b> — and we hit ~60%. Huge margin, and losses are partial.<br><br>• <b>Binary with pending orders:</b> if your broker allows pending, CALL above and PUT below, 1 min. The key is the <b>STRONG PUSH</b>: entering only when the first minute moves hard (≥8 pips) lifts effectiveness to <b>71%</b> (vs 63% if you take them all). At 71% the margin is really good.<br><br><b>What's a pip?</b> The unit of price movement. In EUR/USD = the 4th decimal (0.0001). E.g. 1.1000 to 1.1008 = 8 pips. Binaries measure it the same; the pip just tells you if the push is strong and how far to place the pending.",
+     chkT:"CHECKLIST BEFORE THE NEWS", chk:["Open your platform / broker","Pick the pair (EUR/USD)","Small amount","LEAVE both pending orders: CALL up and PUT down","When one triggers, cancel the other (OCO)"],
+     manT:"HOW TO TRADE — PICK ONE WAY", man:["<b>Before (both):</b> open your platform, EUR/USD, small size.","<b>🤖 AUTOMATIC (pending):</b> place 2 pending at 8-10 pips — CALL up, PUT down, 1 min. The side that moves triggers on its own; cancel the other. Hands-off. Downside: may catch a fakeout (wick).","<b>✋ MANUAL (more accurate, 71%):</b> NO pending. Watch the first candle; if the BODY closes strong (≥8 pips, no big wick), you enter on the NEXT candle, 1 min. Avoids fakeouts, but you must be watching.","<b>After (both):</b> Won or Lost, note if the broker honored the pending.","<b>Golden rule:</b> start SMALL on your own account. Only strong pushes."],
+     medT:"PUSH METER", medQ:"When the news drops, look at the first 1-minute candle:",
+     bS:"💥 Strong (≥8 pips)", bW:"💨 Weak", rS:"✅ STRONG! Enter the side it moved → if UP: CALL (buy) ⬆️ · if DOWN: PUT (sell) ⬇️. With pending orders it triggers on its own.", rW:"✋ Weak. Better skip and wait for the next.",
+     resuT:"HOW DID IT GO?", winL:"Won", loseL:"Lost",
+     proxT:"UPCOMING BIG NEWS (US)", proxMini:"Place pending 2 min before. Times in your zone.",
+     badge:"Effectiveness with strong push: 71%", mueve:"📊 Moves: ", eleg:" (pick EUR/USD)",
+     et:function(mn,nm){return[mn+" min to "+nm+". Easy, get ready.","Coming: "+nm+". Get ready: pending on EUR/USD — CALL up, PUT down.","⚠️ Two minutes! Place the pending NOW. One up, one down.","30 seconds… breathe. All set, don't touch.","🔴 NOW! "+nm+" is out. Is the push STRONG? If the candle is big, enter.","Did it keep going strong? Let it run for a minute.","News passed. Getting the next one."];},
+     exp:{NFP:"🔥 Usually hits HARD — ~28 pip spike",CPI:"🔥 Strong — inflation moves a lot",FOMC:"⚡ Can be VERY strong — rate decision"},
+     animo:["Easy, you know this.","Patience, the strong push comes.","One step at a time.","Today could be the day.","Trust the plan."],
+     winM:["Nice! 💪","That's it! 🎯","Let's go.","Great one!"], loseM:["Easy, next one.","It happens, we go on.","Small account, no drama.","Breathe, it'll come."],
+     racha:function(n){return n>0?("🔥 Streak: "+n+" in a row"):(n<0?("Streak: "+(-n)+" losses — easy"):"");}
+   },
+   pt:{ sub:"seu companheiro para operar as notícias",
+     l_q:"Para que serve?", l_c:"Checklist", l_m:"Como operar",
+     qsirveT:"PARA QUE SERVE?",
+     qsirveB:"Você opera o <b>impulso</b> das notícias grandes. Duas formas:<br><br>• <b>Forex (a mais segura):</b> compra acima, venda abaixo (straddle). Uma dispara, busca ganhar 2–3x o que arrisca. Como é <b>2:1, lucra a partir de 33%</b> — e acertamos ~60%. Margem enorme, e as perdas são parciais.<br><br>• <b>Binárias com ordens pendentes:</b> se a corretora permite pendentes, CALL acima e PUT abaixo, 1 min. A chave é o <b>IMPULSO FORTE</b>: entrar só quando o primeiro minuto move forte (≥8 pips) sobe a eficácia para <b>71%</b> (contra 63% se entrar em todas). Com 71% a margem é boa de verdade.<br><br><b>O que é um pip?</b> A unidade de movimento do preço. No EUR/USD = a 4ª casa decimal (0.0001). Ex: de 1.1000 a 1.1008 = 8 pips. Nas binárias mede-se igual; o pip só serve para medir se o impulso é forte e a que distância pôr a pendente.",
+     chkT:"CHECKLIST ANTES DA NOTÍCIA", chk:["Abra sua plataforma / corretora","Escolha o par (EUR/USD)","Valor pequeno","DEIXE as 2 ordens pendentes: CALL acima e PUT abaixo","Quando uma dispara, cancele a outra (OCO)"],
+     manT:"COMO OPERAR — ESCOLHA UMA FORMA", man:["<b>Antes (as duas):</b> abra sua plataforma, EUR/USD, valor pequeno.","<b>🤖 AUTOMÁTICA (pendente):</b> ponha 2 pendentes a 8-10 pips — CALL acima, PUT abaixo, 1 min. A do lado que se move dispara sozinha; cancele a outra. Sem olhar nada. Contra: pode pegar um fakeout (pavio).","<b>✋ MANUAL (mais precisa, 71%):</b> SEM pendentes. Olhe a primeira vela; se o CORPO fecha forte (≥8 pips, sem pavio grande), você entra na SEGUINTE vela, 1 min. Evita fakeouts, mas tem que estar olhando.","<b>Depois (as duas):</b> Ganhei ou Perdi, anote se a corretora respeitou a pendente.","<b>Regra de ouro:</b> comece PEQUENO na sua conta. Só impulsos fortes."],
+     medT:"MEDIDOR DE IMPULSO", medQ:"Quando sair a notícia, olhe a primeira vela de 1 minuto:",
+     bS:"💥 Forte (≥8 pips)", bW:"💨 Fraco", rS:"✅ FORTE! Entre do lado que moveu → se SUBIU: CALL (compra) ⬆️ · se CAIU: PUT (venda) ⬇️. Com pendentes já dispara sozinha.", rW:"✋ Fraco. Melhor deixar passar e esperar a próxima.",
+     resuT:"COMO FOI?", winL:"Ganhei", loseL:"Perdi",
+     proxT:"PRÓXIMAS NOTÍCIAS GRANDES (EUA)", proxMini:"Ponha as pendentes 2 min antes. Horas na sua zona.",
+     badge:"Eficácia com impulso forte: 71%", mueve:"📊 Move: ", eleg:" (escolha EUR/USD)",
+     et:function(mn,nm){return["Faltam "+mn+" min para "+nm+". Calma, prepare-se.","Vem: "+nm+". Prepare: pendentes em EUR/USD — CALL acima, PUT abaixo.","⚠️ Dois minutos! Ponha as pendentes AGORA. Uma acima, uma abaixo.","30 segundos… respire. Tudo pronto, não toque.","🔴 AGORA! Saiu "+nm+". O impulso é FORTE? Se a vela é grande, entre.","Seguiu forte para o mesmo lado? Deixe correr um minuto.","Notícia passou. Já preparo a próxima."];},
+     exp:{NFP:"🔥 Costuma bater FORTE — impulso de ~28 pips",CPI:"🔥 Forte — a inflação move muito",FOMC:"⚡ Pode ser MUITO forte — decisão de juros"},
+     animo:["Calma, você sabe disso.","Paciência, o impulso forte vem.","Um passo de cada vez.","Hoje pode ser o dia.","Confie no plano."],
+     winM:["Boa! 💪","É isso! 🎯","Vamos lá.","Golaço!"], loseM:["Calma, a próxima.","Acontece, seguimos.","Conta pequena, sem drama.","Respire, vai vir."],
+     racha:function(n){return n>0?("🔥 Sequência: "+n+" seguidas"):(n<0?("Sequência: "+(-n)+" seguidas — calma"):"");}
+   }
+  };
+
+  var L="es", tz="America/Argentina/Buenos_Aires", tzl="ARG", racha=0, audioOn=false, actx=null, lastBeep=0, lastAnimo=0;
+  try{ var sv=JSON.parse(localStorage.getItem('lp')||'{}'); L=sv.L||L; racha=sv.racha||0; tz=sv.tz||tz; tzl=sv.tzl||tzl; }catch(e){}
+  function save(){ try{ localStorage.setItem('lp',JSON.stringify({L:L,racha:racha,tz:tz,tzl:tzl})); }catch(e){} }
+  var el=function(id){return document.getElementById(id);};
+  el('lang').value=L; Array.prototype.forEach.call(el('tz').options,function(o){ if(o.value.split('|')[0]===tz)o.selected=true; });
+
+  function beep(f,d){ if(!audioOn||!actx)return; var o=actx.createOscillator(),g=actx.createGain(); o.frequency.value=f; o.connect(g); g.connect(actx.destination); g.gain.value=.18; o.start(); o.stop(actx.currentTime+d); }
+  el('sonido').onclick=function(){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); audioOn=true; el('sonido').textContent="🔔✓"; beep(880,.12);}catch(e){} };
+  Array.prototype.forEach.call(document.querySelectorAll('[data-sec]'),function(b){ b.onclick=function(){ var s=el(b.dataset.sec); s.style.display=s.style.display==='none'?'block':'none'; }; });
+  el('lang').onchange=function(){ L=this.value; save(); render(); };
+  el('tz').onchange=function(){ var p=this.value.split('|'); tz=p[0]; tzl=p[1]; save(); tick(); pintar(); };
+  el('bstrong').onclick=function(){ el('med_res').style.color='#8ef0ad'; el('med_res').textContent=T[L].rS; };
+  el('bweak').onclick=function(){ el('med_res').style.color='#e8d08a'; el('med_res').textContent=T[L].rW; };
+  el('bwin').onclick=function(){ racha=racha>=0?racha+1:1; save(); var a=T[L].winM; el('racha').textContent=a[Math.floor(Math.random()*a.length)]+" · "+T[L].racha(racha); };
+  el('blose').onclick=function(){ racha=racha<=0?racha-1:-1; save(); var a=T[L].loseM; el('racha').textContent=a[Math.floor(Math.random()*a.length)]+" · "+T[L].racha(racha); };
+
+  function hloc(ts){ return new Date(ts).toLocaleString('es',{timeZone:tz,weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+" "+tzl; }
+  function fmt(ms){ var neg=ms<0; ms=Math.abs(ms); var s=Math.floor(ms/1000); var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60; var p=function(x){return(x<10?'0':'')+x;}; return (neg?'+':'')+(h>0?p(h)+':':'')+p(m)+':'+p(ss); }
+  function proxima(){ var now=Date.now(); var f=cal.filter(function(e){return e.ts>now-600000;}); return f.length?f.sort(function(a,b){return a.ts-b.ts;})[0]:null; }
+
+  function render(){ var t=T[L];
+    el('sub').textContent=t.sub; el('l_qsirve').textContent=t.l_q; el('l_chk').textContent=t.l_c; el('l_man').textContent=t.l_m;
+    el('qsirve_t').textContent=t.qsirveT; el('qsirve_b').innerHTML=t.qsirveB;
+    el('chk_t').textContent=t.chkT; el('man_t').textContent=t.manT; el('man_b').innerHTML=t.man.map(function(x){return '<li>'+x+'</li>';}).join('');
+    el('chk_items').innerHTML=t.chk.map(function(x){return '<div class="chk"><span class="box">✓</span><span>'+x+'</span></div>';}).join('');
+    Array.prototype.forEach.call(document.querySelectorAll('.chk'),function(c){ c.onclick=function(){ c.classList.toggle('on'); }; });
+    el('med_t').textContent=t.medT; el('med_q').textContent=t.medQ; el('bstrong').textContent=t.bS; el('bweak').textContent=t.bW;
+    el('resu_t').textContent=t.resuT; el('win_l').textContent=t.winL; el('lose_l').textContent=t.loseL;
+    el('prox_t').textContent=t.proxT; el('prox_mini').textContent=t.proxMini; el('racha').textContent=t.racha(racha);
+    pintar(); tick();
+  }
+  function pintar(){ var now=Date.now();
+    el('proximas').innerHTML=cal.filter(function(e){return e.ts>now-600000;}).sort(function(a,b){return a.ts-b.ts;}).slice(0,5)
+      .map(function(e){return '<div class="ev"><span class="n">'+e.n+' · '+e.p+'</span><span class="h">'+hloc(e.ts)+'</span></div>';}).join('')||'<div class="mini">—</div>';
+  }
+  function tick(){ var t=T[L]; var ev=proxima();
+    if(!ev){ el('reloj').textContent="—"; el('evento').textContent="—"; el('mensaje').textContent="…"; return; }
+    var S=(ev.ts-Date.now())/1000;
+    el('reloj').textContent=fmt(ev.ts-Date.now()); el('evento').textContent=ev.n+" — "+hloc(ev.ts);
+    el('pares').innerHTML=t.mueve+ev.p+"<span style='color:#6b8bb0;font-weight:500'>"+t.eleg+"</span>"; el('badge').textContent=t.badge;
+    el('expect').innerHTML=(t.exp&&t.exp[ev.n])||"";
+    var E=t.et(Math.max(0,Math.round(S/60)),ev.n); var col,g,msg;
+    if(S>600){col='#2f82c4';g=4;msg=E[0];} else if(S>120){col='#1fb6a6';g=2.4;msg=E[1];} else if(S>30){col='#e0b020';g=1.3;msg=E[2];}
+    else if(S>0){col='#e06a20';g=.7;msg=E[3];} else if(S>-60){col='#ff3b3b';g=.4;msg=E[4];} else if(S>-300){col='#e06a20';g=1.4;msg=E[5];} else {col='#2f82c4';g=4;msg=E[6];}
+    el('mensaje').innerHTML=msg;
+    var pl=el('planet'); pl.style.boxShadow="inset -22px -16px 46px rgba(0,0,0,.6), inset 14px 12px 30px rgba(190,235,255,.3), 0 0 "+(S<120?64:46)+"px 10px "+col+"88"; pl.style.animationDuration=g+'s';
+    var n2=Math.floor(Date.now()/4000); if(n2!==lastAnimo){ lastAnimo=n2; var a=t.animo; el('animo').textContent=a[Math.floor(Math.random()*a.length)]; }
+    var sec=Math.round(S); if(audioOn&&sec!==lastBeep){ if(sec===120)beep(660,.15); if(sec===30)beep(770,.15); if(sec<=0&&sec>-2)beep(990,.3); lastBeep=sec; }
+  }
+  render(); setInterval(tick,500); setInterval(pintar,60000);
+})();
+</script>
+</body>
+</html>
